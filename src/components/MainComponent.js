@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
 import { Navbar, NavbarBrand} from 'reactstrap';
-import Menu from './components/MenuComponent';
-import { DISHES } from './shared/dishes.js';
+import { DISHES } from '../shared/dishes.js';
+import Menu from './MenuComponent';
+import DishDetail from './DishDetailComponent';
 
 
-class App extends Component {
+class Main extends Component {
   constructor(props){
     super(props);
     this.state = {
-      dishes: DISHES
+      dishes: DISHES,
+      selectedDish: null
     };
+  }
+
+  onDishSelect(dishID){
+    this.setState({ selectedDish: dishID });
   }
 
   render() {
@@ -20,31 +26,11 @@ class App extends Component {
             <NavbarBrand href="/">Ristorante Con Fusion</NavbarBrand>
           </div>
         </Navbar>
-        <Menu dishes = {this.state.dishes}/>
+        <Menu dishes = {this.state.dishes} onClick = {(dishID) => this.onDishSelect(dishID)} />
+        <DishDetail dishID = {this.state.dishes.filter((dish) => this.state.selectedDish === dish.id)[0]}/>
       </div>
     );
   }
 }
 
-/*function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}*/
-
-export default App;
+export default Main;

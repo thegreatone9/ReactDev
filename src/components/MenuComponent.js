@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Media, Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
 
 class Menu extends Component{
-    constructor(props){
-        super(props);
-    }
 
     render() {
         const menu = this.props.dishes.map((dish) => {

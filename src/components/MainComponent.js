@@ -4,7 +4,7 @@ import { DISHES } from '../shared/dishes.js';
 import Menu from './MenuComponent';
 import DishDetail from './DishDetailComponent';
 
-
+//The main component is responsible for everything related to state and data flow throughout the components
 class Main extends Component {
   constructor(props){
     super(props);
@@ -14,6 +14,7 @@ class Main extends Component {
     };
   }
 
+  //method updating the state lies in the main component
   onDishSelect(dishID){
     this.setState({ selectedDish: dishID });
   }

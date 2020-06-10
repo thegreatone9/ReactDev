@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import { Navbar, NavbarBrand} from 'reactstrap';
 import { DISHES } from '../shared/dishes.js';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Menu from './MenuComponent';
+import Home from './HomeComponent';
 import DishDetail from './DishDetailComponent';
 
 //The main component is responsible for everything related to state and data flow throughout the components
@@ -12,22 +14,28 @@ class Main extends Component {
     super(props);
     this.state = {
       dishes: DISHES,
-      selectedDish: null
     };
   }
 
-  //method updating the state lies in the main component
-  onDishSelect(dishID){
-    this.setState({ selectedDish: dishID });
-    console.log(this.selectedDish);
-  }
 
   render() {
+    const HomePage = () => {
+        return(
+            <Home />
+        );
+    }
+
     return (
       <div className="">
         <Header />
-        <Menu dishes = {this.state.dishes} onClick = {(dishID) => this.onDishSelect(dishID)} />
-        <DishDetail dishID = {this.state.dishes.filter((dish) => this.state.selectedDish === dish.id)[0]}/>
+        <Switch>
+            {/*The homepage functional component is created above just under render()*/}
+            <Route path="/home" component={HomePage} />
+            {/* to pass props to component inside Route, you write it like this: */}
+            <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />}/>
+            {/*anything doesn't match home or menu will be redirected to the default of home: */}
+            <Redirect to="/home" />
+        </Switch>
         <Footer />
       </div>
     );

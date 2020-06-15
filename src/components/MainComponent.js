@@ -1,53 +1,69 @@
-import React, {Component} from 'react';
-import { Navbar, NavbarBrand} from 'reactstrap';
-import { DISHES } from '../shared/dishes.js';
-import { COMMENTS } from '../shared/comments.js';
-import { LEADERS } from '../shared/leaders.js';
-import { PROMOTIONS } from '../shared/promotions.js';
+import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { DISHES } from '../shared/dishes';
+import { COMMENTS } from '../shared/comments';
+import { LEADERS } from '../shared/leaders';
+import { PROMOTIONS } from '../shared/promotions';
+
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Menu from './MenuComponent';
+import DishDetail from './DishDetailComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
-import DishDetail from './DishDetailComponent';
+import About from './AboutComponent';
 
-//The main component is responsible for everything related to state and data flow throughout the components
 class Main extends Component {
-  constructor(props){
+
+  constructor(props) {
     super(props);
     this.state = {
-      dishes: DISHES,
-      comments: COMMENTS,
-      leaders: LEADERS,
-      promotions: PROMOTIONS
+        dishes: DISHES,
+        comments: COMMENTS,
+        promotions: PROMOTIONS,
+        leaders: LEADERS
     };
   }
 
+  onDishSelect(dishId) {
+    this.setState({ selectedDish: dishId});
+  }
 
   render() {
-    //filter returns an array...since, we know only 1 item is in the array, we just selected the first and only item using [0]
-    console.log(this.state.dishes.filter((dish) => dish.featured)[0]);  
     const HomePage = () => {
-        return(
-            <Home dish = {this.state.dishes.filter((dish) => dish.featured)[0]} 
-                  promotions = {this.state.promotions.filter((promo) => promo.featured)[0]}
-                  leaders = {this.state.leaders.filter((leader) => leader.featured)[0]}  />
-        );
+      return(
+          <Home 
+            dish={this.state.dishes.filter((dish) => dish.featured)[0]}
+            promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
+            leader={this.state.leaders.filter((leader) => leader.featured)[0]}
+          />
+      );
+    }
+
+    const DishWithId = ({match}) => {
+      return(
+          <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
+            comments={this.state.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))} />
+      );
+    };
+
+    const AboutWithLeaders = () => {
+      return (
+        <About leaders={this.state.leaders} />
+      );
     }
 
     return (
-      <div className="">
-        <Header />
-        <Switch>
-            {/*The homepage functional component is created above just under render()*/}
-            <Route path="/home" component={HomePage} />
-            {/* to pass props to component inside Route, you write it like this: */}
+      <div>
+        <Header/>
+          <Switch>
+            <Route path="/home" component={HomePage}/>
             <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes} />}/>
             <Route exact path="/contactus" component={Contact} />
-            {/*anything doesn't match home or menu will be redirected to the default of home: */}
-            <Redirect to="/home" />
-        </Switch>
+            <Route path='/menu/:dishId' component={DishWithId} />
+            <Route path='/aboutus' component={AboutWithLeaders}/>
+            <Redirect to="/home"/>
+          </Switch>
         <Footer />
       </div>
     );

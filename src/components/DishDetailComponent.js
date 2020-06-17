@@ -2,8 +2,9 @@ import React from 'react';
 import { Card, CardImg, CardTitle, CardBody, CardText, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-function RenderDish({dish}){
-    //console.log(props.dishID);
+//stateless functional component like the one you have written gets all the props as the first argument: function RenderDish({dish, second_property})
+function RenderDish({dish, randy}){
+    console.log(randy);
     return(
         <Card>
             <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
@@ -32,7 +33,7 @@ function RenderComments({comments}){
 const DishDetail = (props) => {
     
     if (props.dish != null){
-        console.log('DishDetail component render invoked.'+ (props.dishID));
+        //console.log('DishDetail component render invoked.'+ (props.dishID));
         return(
             <div className = "container">
                 <div className="row">
@@ -47,7 +48,7 @@ const DishDetail = (props) => {
                 </div>
                 <div className = "row">
                     <div className = "col-12 col-md-5 m-1">
-                        <RenderDish dish = {props.dish}/>
+                        <RenderDish dish = {props.dish} randy={2}/>
                     </div>
                     <div className = "col-12 col-md-5 m-1">
                         <h4>Comments</h4>

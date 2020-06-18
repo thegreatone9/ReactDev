@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron, Modal, ModalHeader, ModalBody, Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
@@ -12,6 +12,7 @@ class Header extends Component {
         //need to bind in react, to use functions in JSX. alternative to using arrow function inside the onClick() in the JSX
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
     }
 
     toggleNav(){
@@ -24,6 +25,12 @@ class Header extends Component {
         this.setState({
             isModalOpen: !this.state.isModalOpen
         });
+    }
+
+    handleLogin(event){
+        this.toggleModal();
+        alert("Username: " + this.username.value + "\nPassword: " + this.password.value + "\nRemember: " + this.remember.checked);
+        event.preventDefault();
     }
 
     render(){
@@ -50,12 +57,33 @@ class Header extends Component {
                                 <NavItem>
                                     <NavLink className="nav-link" to="/contactus"><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
                                 </NavItem>
+                            </Nav>
+                            <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-                                        <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
-                                        <ModalBody></ModalBody>
-                                    </Modal>
+                                    <Button outline onClick={this.toggleModal} color="primary"><span className="fa fa-sign-in fa-lg"> Login</span></Button>
                                 </NavItem>
+                                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                                    <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+                                    <ModalBody>
+                                        <Form onSubmit={this.handleLogin}>
+                                            <FormGroup>
+                                                <Label htmlFor="username">Username</Label>
+                                                <Input type="text" id="username" name="username" innerRef = {(input) => this.username = input}></Input>
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Label htmlFor="password">Password</Label>
+                                                <Input type="password" id="password" name="password" innerRef = {(input) => this.password = input}></Input>
+                                            </FormGroup>
+                                            <FormGroup check>
+                                                <Label check>
+                                                    <Input type="checkbox" name="remember" innerRef = {(input) => this.remember = input}></Input>
+                                                    <p>Remember me</p>
+                                                </Label>
+                                            </FormGroup>
+                                            <Button type="submit" value="submit" className="primary">Login</Button>
+                                        </Form>
+                                    </ModalBody>
+                                </Modal>
                             </Nav>
                         </Collapse>
                     </div>

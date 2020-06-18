@@ -1,20 +1,28 @@
 import React, {Component} from 'react';
-import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron } from 'reactstrap';
+import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
     constructor(props){
         super(props);
         this.state = {
-            isNavOpen : false
+            isNavOpen : false,
+            isModalOpen: false
         }
         //need to bind in react, to use functions in JSX. alternative to using arrow function inside the onClick() in the JSX
         this.toggleNav = this.toggleNav.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
 
     toggleNav(){
         this.setState({
             isNavOpen : !this.state.isNavOpen
+        });
+    }
+
+    toggleModal(){
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
         });
     }
 
@@ -41,6 +49,12 @@ class Header extends Component {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink className="nav-link" to="/contactus"><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                                        <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+                                        <ModalBody></ModalBody>
+                                    </Modal>
                                 </NavItem>
                             </Nav>
                         </Collapse>

@@ -24,10 +24,10 @@ function Home(props) {
                     <RenderCard item={props.dish}/>
                 </div>
                 <div className = "col-12 col-md m-1">
-                    <RenderCard item={props.promotions}/>
+                    <RenderCard item={props.promotion}/>
                 </div>
                 <div className = "col-12 col-md m-1">
-                    <RenderCard item={props.leaders}/>    
+                    <RenderCard item={props.leader}/>    
                 </div>
             </div>
         </div>

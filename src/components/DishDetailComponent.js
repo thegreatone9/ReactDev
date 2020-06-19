@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Card, CardImg, CardTitle, CardBody, CardText, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormFeedback} from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Errors } from 'react-redux-form';
 
 //stateless functional component like the one you have written gets all the props as the first argument: function RenderDish({dish, second_property})
 function RenderDish({dish, randy}){
@@ -31,12 +30,9 @@ function RenderComments({comments}){
     );
 }
 
- 
 
-
-
-
-class DishDetail extends Component {
+//since we need to re-render views upon state changes, we need class based components
+class CommentForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -52,9 +48,9 @@ class DishDetail extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
-        
     }
 
+    //this function sets the state for the value of the relevant input fields
     handleInputChange(event){
         const target = event.target;
         const value = target.value;
@@ -65,12 +61,14 @@ class DishDetail extends Component {
         event.preventDefault();
     }
 
+    //this function observes whether the relevant input field has been Blurred out of
     handleBlur = (field) => (evt) => {
         this.setState({
             touched: {...this.state.touched, [field]:true }
         });
     }
 
+    //this function validates whether the 'name' field has correct inputs
     validate(name) {
         const errors = {
             name : ''
@@ -86,12 +84,12 @@ class DishDetail extends Component {
         return errors;
     }
 
+    //this function handles the submit button being clicked inside the write comment button
     handleSubmit = (errors) => (event) => {
         
         if ((errors.name.length === 0) && this.state.touched.name){
             let submitInfo = this.state;
             delete submitInfo.modalState; delete submitInfo.touched;
-            console.log(JSON.stringify(submitInfo));
             alert("Current state is: " + JSON.stringify(submitInfo));
             this.setState({
                     //modalState : false,
@@ -106,76 +104,84 @@ class DishDetail extends Component {
         event.preventDefault();
     }
 
+    //this brings or removes Modal into view
     toggleModal(){
         this.setState({
             modalState : !this.state.modalState
         });
     }
 
-    
     render(){
-        
-        if (this.props.dish != null){
-            //console.log('DishDetail component render invoked.'+ (props.dishID));
-            const errors = this.validate(this.state.name);
-            return(
-                <div className = "container">
-                    <div className="row">
-                        <Breadcrumb>
-                            <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
-                            <BreadcrumbItem active>{this.props.dish.name}</BreadcrumbItem>
-                        </Breadcrumb>
-                        <div className="col-12">
-                            <h3>{this.props.dish.name}</h3>
-                            <hr/>
-                        </div>
-                    </div>
-                    <div className = "row">
-                        <div className = "col-12 col-md-5 m-1">
-                            <RenderDish dish = {this.props.dish} randy={2}/>
-                        </div>
-                        <div className = "col-12 col-md-5 m-1">
-                            <h4>Comments</h4>
-                            <RenderComments comments = {this.props.comments}/><br/>
-                            <Button outline color="dark" onClick={this.toggleModal}><span className="fa fa-pencil fa-lg"> Submit Comment</span></Button>
-                            <Modal isOpen = {this.state.modalState} toggle = {this.toggleModal} >
-                                <ModalHeader toggle = {this.toggleModal}>Submit Comment</ModalHeader>
-                                <ModalBody>
-                                    <Form onSubmit={this.handleSubmit(errors)}>
-                                        <FormGroup>
-                                            <Label htmlFor="rating" row>Rating</Label>
-                                            <Input type="select" id="rating" name="rating" value={this.state.rating} onChange={this.handleInputChange} row>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </Input>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label htmlFor="name" row>Your Name</Label>
-                                            <Input id="name" name="name" value={this.state.name} onChange={this.handleInputChange} placeholder="Your Name" valid = {errors.name === ""} invalid = {errors.name !== ""} onBlur = {this.handleBlur('name')} row></Input>
-                                            <FormFeedback>{errors.name}</FormFeedback>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label htmlFor="comment" row>Comment</Label>
-                                            <Input type="textarea" id="comment" name="comment" value={this.state.comment} onChange={this.handleInputChange} rows={6} ></Input>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Button color="primary" row>Submit</Button>
-                                        </FormGroup>
-                                    </Form>
-                                </ModalBody>
-                            </Modal>
-                        </div>
+        const errors = this.validate(this.state.name);
+        return(
+            <React.Fragment>
+                <Button outline color="dark" onClick={this.toggleModal}><span className="fa fa-pencil fa-lg"> Submit Comment</span></Button>
+                <Modal isOpen = {this.state.modalState} toggle = {this.toggleModal} >
+                    <ModalHeader toggle = {this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                        <Form onSubmit={this.handleSubmit(errors)}>
+                            <FormGroup>
+                                <Label htmlFor="rating" row>Rating</Label>
+                                <Input type="select" id="rating" name="rating" value={this.state.rating} onChange={this.handleInputChange} row>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </Input>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="name" row>Your Name</Label>
+                                <Input id="name" name="name" value={this.state.name} onChange={this.handleInputChange} placeholder="Your Name" valid = {errors.name === ""} invalid = {errors.name !== ""} onBlur = {this.handleBlur('name')} row></Input>
+                                <FormFeedback>{errors.name}</FormFeedback>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="comment" row>Comment</Label>
+                                <Input type="textarea" id="comment" name="comment" value={this.state.comment} onChange={this.handleInputChange} rows={6} ></Input>
+                            </FormGroup>
+                            <FormGroup>
+                                <Button color="primary" row>Submit</Button>
+                            </FormGroup>
+                        </Form>
+                    </ModalBody>
+                </Modal>
+            </React.Fragment>
+        );
+    }
+}
+
+
+function DishDetail(props){
+    if (props.dish != null){
+        return(
+            <div className = "container">
+                <div className="row">
+                    <Breadcrumb>
+                        <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr/>
                     </div>
                 </div>
-            );
-        }
-        else {
-            return(<div></div>);
-        }
-    } 
-}
+                <div className = "row">
+                    <div className = "col-12 col-md-5 m-1">
+                        <RenderDish dish = {props.dish} randy={2}/>
+                    </div>
+                    <div className = "col-12 col-md-5 m-1">
+                        <h4>Comments</h4>
+                        <RenderComments comments = {props.comments}/><br/>
+                        <CommentForm/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    else {
+        return(<div></div>);
+    }
+} 
+
 
 export default DishDetail;

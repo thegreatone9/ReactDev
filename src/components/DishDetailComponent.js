@@ -20,11 +20,15 @@ function RenderComments({comments}){
     return(
         comments.map((every_comment) => {
             return (
-                <ul key={every_comment.id} className = "list-unstyled">
-                    <li>{every_comment.comment}</li>
-                    <br></br>
-                    <li>-- {every_comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(every_comment.date)))}</li>
-                </ul>
+                <React.Fragment>
+                    <ul key={every_comment.id} className = "list-unstyled">
+                        <li>{every_comment.comment}</li>
+                        
+                        <li>-- {every_comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(every_comment.date)))}</li>
+                        <h6>__________</h6>
+                    </ul>
+                    <p/>
+                </React.Fragment>
             );
         })
     );
@@ -90,8 +94,10 @@ class CommentForm extends Component {
         if ((errors.name.length === 0) && this.state.touched.name){
             let submitInfo = this.state;
             delete submitInfo.modalState; delete submitInfo.touched;
-            alert("Current state is: " + JSON.stringify(submitInfo));
-            this.setState({
+            //alert("Current state is: " + JSON.stringify(submitInfo));
+            console.log(this.props.dishId, this.state.rating, this.state.name, this.state.comment);
+            this.props.addComment(this.props.dishId, this.state.rating, this.state.name, this.state.comment);
+            /*this.setState({
                     //modalState : false,
                     rating : '1',
                     name : '',
@@ -99,7 +105,7 @@ class CommentForm extends Component {
                     touched : {
                         name : false
                     }
-            });
+            });*/
         }
         event.preventDefault();
     }
@@ -171,8 +177,8 @@ function DishDetail(props){
                     </div>
                     <div className = "col-12 col-md-5 m-1">
                         <h4>Comments</h4>
-                        <RenderComments comments = {props.comments}/><br/>
-                        <CommentForm/>
+                        <RenderComments comments = {props.comments} /><br/>
+                        <CommentForm addComment={props.addComment} dishId={props.dish.id}/>
                     </div>
                 </div>
             </div>

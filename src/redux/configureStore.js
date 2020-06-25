@@ -15,7 +15,7 @@ export const ConfigureStore = () => {
             comments:Comments,
             promotions:Promotions
         }),
-        applyMiddleware(thunk, logger)    //these stuff are enhancers for our store
+        applyMiddleware(thunk, logger)    //these stuff are enhancers for our store, and thunker and logger are now available in our application
     );
     return store;
 }

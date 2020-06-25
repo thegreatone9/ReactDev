@@ -1,7 +1,7 @@
 import { COMMENTS } from '../shared/comments'; 
 import * as ActionTypes from './ActionTypes';
 
-//each of these reducer files updates its exported state based on the action to the Store (which is a compilation
+//each of these reducer files updates/modifies its exported state, based on the action coming in through the dispatcher, to the Store (which is a compilation
 //of all the reducers and states)
 export const Comments = (state = COMMENTS, action) => {
     switch(action.type){

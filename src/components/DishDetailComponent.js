@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Card, CardImg, CardTitle, CardBody, CardText, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormFeedback} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import {Loading} from './LoadingComponent.js';
 
 //stateless functional component like the one you have written gets all the props as the first argument: function RenderDish({dish, second_property})
 function RenderDish({dish, randy}){
@@ -158,7 +159,30 @@ class CommentForm extends Component {
 
 
 function DishDetail(props){
-    if (props.dish != null){
+
+    //conditional rendering (conditional on the props):
+
+    if (props.isLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+
+    else if (props.errMess) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        );
+    }
+
+    else if (props.dish != null){
         return(
             <div className = "container">
                 <div className="row">

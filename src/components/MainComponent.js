@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 //we import the action js object and will then dispatch into store and then to props of this component
 import { addComment, fetchDishes } from '../redux/ActionCreators';
-
+import { actions } from 'react-redux-form'; //importing an action to enable persistent forms
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Menu from './MenuComponent';
@@ -35,7 +35,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   addComment : (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-  fetchDishes : () => {dispatch(fetchDishes())}   //when this component mounts, we will call this function from the props
+  fetchDishes : () => {dispatch(fetchDishes())},   //when this component mounts, we will call this function from the props
+  resetFeedbackForm: () => { dispatch(actions.reset('feedback'))}  //adding another dispatch: form will be named as feedback and it will be updated. Now send to Contact Component.
 });
 
 
@@ -85,7 +86,7 @@ class Main extends Component {
           <Switch>
             <Route path="/home" component={HomePage}/>
             <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes} />}/>
-            <Route exact path="/contactus" component={Contact} />
+            <Route exact path="/contactus" component={() => <Contact resetFeedbackFrom = {this.props.resetFeedbackFrom}></Contact>} />
             <Route path='/menu/:dishId' component={DishWithId} />
             <Route path='/aboutus' component={AboutWithLeaders}/>
             <Redirect to="/home"/>

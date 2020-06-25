@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Breadcrumb, BreadcrumbItem, Row, Input, Label, Col, Button } from 'reactstrap';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Control, Form, Errors, actions } from 'react-redux-form';
 import { Link } from 'react-router-dom';
 
 const required = (val) => val && val.length;
@@ -20,7 +20,7 @@ class Contact extends Component {
     handleSubmit(values){
         console.log('Current state is ' + JSON.stringify(values));
         alert('Current state is: ' + JSON.stringify(values));
-        //event.preventDefault();
+        this.props.resetFeedbackForm();
     }
 
     
@@ -69,13 +69,13 @@ class Contact extends Component {
                           <h3>Send us your Feedback</h3>
                        </div>
                     <div className = "col-12 col-md-9">
-                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                        <Form model="feedback" onSubmit={(values) => this.handleSubmit(values)}>
                             <Row className="form-group">
                                 <Label htmlFor="firstname" md={2} >
                                     First Name
                                 </Label>
                                 <Col md={10}>
-                                    <Control.text model=".firstname" id="firstname" name="firstname" placeholder="First Name" className="form-control" validators = {{required, minLength:minLength(3), maxLength:maxLength(3)}}></Control.text>
+                                    <Control.text model=".firstname" id="firstname" name="firstname" placeholder="First Name" className="form-control" validators = {{required, minLength:minLength(3), maxLength:maxLength(15)}}></Control.text>
                                     <Errors className="text-danger" model=".firstname" show="touched" messages={{required: 'Required', minLength:'Must be greater than 2 chars', maxLength:'Must be less than 15 chars'}}/> 
                                 </Col>
                             </Row>
@@ -84,7 +84,7 @@ class Contact extends Component {
                                     Last Name
                                 </Label>
                                 <Col md={10}>
-                                    <Control.text model=".lastname" id="lastname" name="lastname" placeholder="Last Name" className="form-control" validators = {{required, minLength:minLength(3), maxLength:maxLength(3)}}></Control.text>
+                                    <Control.text model=".lastname" id="lastname" name="lastname" placeholder="Last Name" className="form-control" validators = {{required, minLength:minLength(3), maxLength:maxLength(15)}}></Control.text>
                                     <Errors className="text-danger" model=".firstname" show="touched" messages={{required: 'Required', minLength:'Must be greater than 2 chars', maxLength:'Must be less than 15 chars'}}/>
                                 </Col>
                             </Row>
@@ -93,7 +93,7 @@ class Contact extends Component {
                                     Telephone Number
                                 </Label>
                                 <Col md={10}>
-                                    <Control.text model=".telnum" id="telnum" name="telnum" placeholder="Telephone" className="form-control" validators = {{required, minLength:minLength(3), maxLength:maxLength(3), isNumber}}></Control.text>
+                                    <Control.text model=".telnum" id="telnum" name="telnum" placeholder="Telephone" className="form-control" validators = {{required, minLength:minLength(3), maxLength:maxLength(15), isNumber}}></Control.text>
                                     <Errors className="text-danger" model=".telnum" show="touched" messages={{required:'Required', minLength:'Must be greater than 2 chars', maxLength:'Must be less than 15 chars', isNumber:'Must be a number'}} />
                                 </Col>
                             </Row>
@@ -136,7 +136,7 @@ class Contact extends Component {
                                     </Button>
                                 </Col>
                             </Row>
-                        </LocalForm>
+                        </Form>
                     </div>
                 </div>
             </div>

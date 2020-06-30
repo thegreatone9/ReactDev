@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import { Card, CardImg, CardTitle, CardBody, CardText, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, FormFeedback} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {Loading} from './LoadingComponent.js';
+import { baseUrl } from '../shared/baseUrl';
 
 //stateless functional component like the one you have written gets all the props as the first argument: function RenderDish({dish, second_property})
 function RenderDish({dish, randy}){
     console.log(randy);
     return(
         <Card>
-            <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
+            <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}></CardImg>
             <CardBody>
                 <CardTitle>{dish.name}</CardTitle>
                 <CardText>{dish.description}</CardText>

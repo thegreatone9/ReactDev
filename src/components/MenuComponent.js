@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import {Loading} from './LoadingComponent.js';
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 //this function is passed into the functional Menu component below
 function RenderMenuItem({dish}) {
@@ -9,7 +10,8 @@ function RenderMenuItem({dish}) {
         <Card>
             {/* since we are no longer using the onClick functions in MenuComponent, we'll instead use Link to route to the selected dish:  */}
             <Link to={`/menu/${dish.id}`}>
-                <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
+                {/*fetching image from server directly using url and json key*/}
+                <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}></CardImg>
                 <CardImgOverlay>
                     <CardTitle>{dish.name}</CardTitle>
                 </CardImgOverlay>
